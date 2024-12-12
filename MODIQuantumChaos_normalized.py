@@ -346,15 +346,15 @@ def find_loop(costmatrix,start_row,start_col,solution):
                     currentcol = d # mark current column
                     break
             startd = 0 # set the index starting horizontal search back to 0
-            if search == hor:
-                if len(loop) == 1:
+            if search == hor: # if finishes searching the row without finding a usable node, resume the last vertical search
+                if len(loop) == 1: # no usable node on the initial row, the search fails
                     break
-                starts = loop[len(loop) - 1][0] + 1
+                starts = loop[len(loop) - 1][0] + 1 # start from the next row index
                 loop.pop() # delete the last element in loop
                 used_cols.pop() # delete the last element in used_cols
-                currentrow = loop[len(loop) - 1][0]
-                currentcol = loop[len(loop) - 1][1]
-                search = vert
+                currentrow = loop[len(loop) - 1][0] # mark current row
+                currentcol = loop[len(loop) - 1][1] # mark current column
+                search = vert # switch to vertical search
         if loop_found == False and search == vert:
             for s in range(starts,row):
                 # if there's another basic cell (excluding start_row itself) on the column, and this column hasn't been visited before
@@ -365,12 +365,12 @@ def find_loop(costmatrix,start_row,start_col,solution):
                     currentrow = s # mark current row
                     break
             starts = 0 # set the index starting vertical search back to 0
-            if search == vert:
-                startd = loop[len(loop) - 1][1] + 1
+            if search == vert: # if finishes searching the column without finding a usable node, resume the last horizontal search
+                startd = loop[len(loop) - 1][1] + 1 # start from the next column index
                 loop.pop() # delete the last element in loop
                 used_rows.pop() # delete the last element in used_rows
-                currentrow = loop[len(loop) - 1][0]
-                currentcol = loop[len(loop) - 1][1]
+                currentrow = loop[len(loop) - 1][0] # mark current row
+                currentcol = loop[len(loop) - 1][1] # mark current column
                 search = hor # switch to horizontal search
     
     # separate loop nodes to plus nodes and minus nodes
@@ -387,7 +387,7 @@ def find_loop(costmatrix,start_row,start_col,solution):
         closed_loop[a[0]][a[1]] = -1
 
     cost = 0
-    min_sandmove = 1e9 # initialize min_sandmove with a max value
+    min_sandmove = 1e9 # initialize min_sandmove with a MAX value
     epsilon = 1.e-9 # assign epsilon value
 
     for i in range(0,row):
@@ -405,8 +405,8 @@ def find_loop(costmatrix,start_row,start_col,solution):
 
     for i in range(0,row):
         for j in range(0,col):
-            if solution[i][j] != epsilon:
-                cost += costmatrix[i][j] * solution[i][j] # calculate total cost: excluding the cells equal to epsilon
+            if solution[i][j] != epsilon:  # calculate total cost (excluding the cells equal to epsilon for better precision)
+                cost += costmatrix[i][j] * solution[i][j]
     
     return solution, cost
 
