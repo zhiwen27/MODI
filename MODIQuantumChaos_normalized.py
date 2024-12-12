@@ -6,18 +6,24 @@ import scipy as sp
 import time as tm
 from scipy.spatial import distance
 
-# input parameters
+# set parameters of wavefunctions to be defined
+# xmin, xmax, ymin, ymax set the border of the sandbox
 xmin = -3.747
 xmax = 3.747
 ymin = -3.747
 ymax = 3.747
+# nbox sets the number of grids on one side. The sandbox will be divided into nbox * nbox grids.
 nbox = 40
+# initial strethes in x and y direction
 rho = 0.5
+# final streches in x and y direction with respect to the initial
 p =  0.25
-theta = np.pi / 10
+# the angle the wavefunction rotates
+theta = np.pi / 12
+# set cutoff value to be 0.001 / (nbox^2) (arbitrarily)
 gridboxcutoff = 0.001 / (nbox ** 2)
 
-# define initial and final functions
+# define initial and final wavefunctions
 def f_init(y,x):
     return (1/np.pi)*np.e**((-x**2)-((y**2)/(rho**2)))
 
@@ -31,6 +37,7 @@ def f_final(y,x):
 init_integral = sp.integrate.dblquad(f_init, xmin, xmax, lambda x: ymin, lambda x: ymax)
 fin_integral = sp.integrate.dblquad(f_final, xmin, xmax, lambda x: ymin, lambda x: ymax)
 
+# normalize initial and final wavefunctions
 def f_init_norm(y,x):
     return f_init(y,x)/init_integral[0]
 

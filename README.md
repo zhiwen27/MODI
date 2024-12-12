@@ -19,4 +19,8 @@ Quantum Chaos:
 
 Errors:
 1. Normalizing sum_supply and sum_demand would cause a discrepency when sum_supply differs from sum_demand greatly.
-2. Codes hang at nbox = 24/ 28/ 30, theta = np.pi / 3 (2 small amount of leftouts in demand[] and supply[]); nbox = 40, theta = np.pi / 7 (print repeated values at some point).
+2. Codes hang at nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftouts in demand[] and supply[]);
+                 nbox = 40, theta = 𝜋/7 (print repeated values at some point);
+                 nbox = 40, theta = 𝜋/11 (hang at some point);
+
+References:
