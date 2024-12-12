@@ -16,16 +16,19 @@ occupied cell and mark the corner with a plus sign. Continue the search until th
 marked with minus sign.
 6.Check again for the revised solution to see if it's optimal.
 
-Some problems:
+Errors:
+1. The normalizing method would cause a discrepency when sum_supply differs from sum_demand greatly.
+2. Hang at nbox = 24/ 28/ 30, theta = np.pi / 3 (2 small amount of leftouts in demand[] and supply[]).
 '''
 import sys
-sys.setrecursionlimit(5000)
+sys.setrecursionlimit(5000)  # set maximum recursion depth manually
 
 import numpy as np
 import scipy as sp
 import time as tm
 from scipy.spatial import distance
 
+# input parameters
 xmin = -3.747
 xmax = 3.747
 ymin = -3.747
@@ -36,6 +39,7 @@ p =  0.25
 theta = np.pi / 3
 gridboxcutoff = 0.001 / (nbox ** 2)
 
+# define initial and final functions
 def f_init(y,x):
     return (1/np.pi)*np.e**((-x**2)-((y**2)/(rho**2)))
 
@@ -58,6 +62,7 @@ def f_final_norm(y,x):
 def integrand(y,x):
     return f_init_norm(y,x)-f_final_norm(y,x)
 
+# calculate sand boxes, supply and demand cells
 sand = [[0 for x in range(nbox)] for y in range(nbox)]
 dx = (xmax-xmin)/nbox
 dy = (ymax-ymin)/nbox
@@ -88,15 +93,12 @@ sum_supply = 0
 for i in supply:
     sum_supply += i
 
-'''
-actually a pretty big discrepency when sum_supply differs from sum_demand greatly
-still hangs at nbox = 24,28,30 theta = np.pi / 3, 2 very small amount of leftout in demand and supply
-'''
 for i in range(0,len(supply)):
     supply[i] = supply[i] * (sum_supply + sum_demand) / (2 * sum_supply)
 for i in range(0,len(demand)):
     demand[i] = demand[i] * (sum_supply + sum_demand) / (2 * sum_demand)
 
+# find cost matrices
 row = len(supply)
 col = len(demand)
 costmatrix = [[-1 for x in range(col)] for y in range(row)]
@@ -108,6 +110,7 @@ for i in range(len(supply)):
         costmatrix[i][j] = euc_dist
         costmatrix_copy[i][j] = euc_dist
 
+# using least cost method, count the total number of supply and demand cells that get to 0
 def finished_least_cost(supply,demand):
     cnt_supply = 0
     cnt_demand = 0
@@ -119,6 +122,8 @@ def finished_least_cost(supply,demand):
             cnt_demand += 1
     return cnt_supply + cnt_demand
 
+# get u's and v's, check if all the u's and v's get their values
+# input a list, return true if there's still u/ v with its initialized value
 def finish_loop(list):
     flag = False
     for i in list:
@@ -126,6 +131,7 @@ def finish_loop(list):
             flag = True
     return flag
 
+# find the initial solution using least cost method
 def find_initial_sol(costmatrix,costmatrix_copy,supply,demand):
     cost = 0
     matrix_min = np.min(costmatrix_copy)
@@ -403,6 +409,7 @@ def find_loop(costmatrix,start_row,start_col,solution):
     
     return solution, cost
 
+ # mark start time
 start_time = tm.time()
 solution, cost = find_initial_sol(costmatrix,costmatrix_copy,supply,demand)
 continue_check_sol, solution, cost = check_solution(costmatrix,solution,cost)
