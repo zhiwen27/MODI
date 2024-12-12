@@ -323,54 +323,57 @@ def find_loop(costmatrix,start_row,start_col,solution):
     used_rows = []
     used_cols = []
     pivotcol = start_col # mark the target column
-    loop = [[start_row,start_col]]
+    loop = [[start_row,start_col]] # add the pivot cell to plus_nodes list
     loop_found = False
-    hor = 0
-    vert = 1
-    search = hor
-    currentrow = start_row
-    currentcol = start_col
-    startd = 0
-    starts = 0
+    hor = 0 # set horizontal search flag
+    vert = 1 # set vertical search flag
+    search = hor # start by searching horizontally
+    currentrow = start_row # row of current node (initialize with start_row)
+    currentcol = start_col # column of current node (initialize with start_column)
+    startd = 0 # index of where to start horizontal search (usually starts at 0)
+    starts = 0 # index of where to start vertical search (usually starts at 0)
 
     while(loop_found == False):
-        if search == hor:
+        if search == hor: # horizontal search
             for d in range(startd,col):
+                # if there's another basic cell (excluding start_col itself) on the row, and this row hasn't been visited before
                 if d != currentcol and solution[currentrow][d] != 0 and check_list(d,used_cols):
-                    loop.append([currentrow,d])
-                    used_rows.append(currentrow)
-                    if d == pivotcol:
+                    loop.append([currentrow,d]) # add this cell to loop_nodes
+                    used_rows.append(currentrow) # add this row to used_rows
+                    if d == pivotcol: # if the column now equals to the target_col, a loop forms, set loop_found to true
                         loop_found = True
-                    search = vert
-                    currentcol = d
+                    search = vert # switch to vertical search
+                    currentcol = d # mark current column
                     break
-            startd = 0
+            startd = 0 # set the index starting horizontal search back to 0
             if search == hor:
                 if len(loop) == 1:
                     break
                 starts = loop[len(loop) - 1][0] + 1
-                loop.pop()
-                used_cols.pop()
+                loop.pop() # delete the last element in loop
+                used_cols.pop() # delete the last element in used_cols
                 currentrow = loop[len(loop) - 1][0]
                 currentcol = loop[len(loop) - 1][1]
                 search = vert
         if loop_found == False and search == vert:
             for s in range(starts,row):
+                # if there's another basic cell (excluding start_row itself) on the column, and this column hasn't been visited before
                 if s != currentrow and solution[s][currentcol] != 0 and check_list(s,used_rows):
-                    loop.append([s,currentcol])
-                    used_cols.append(currentcol)
-                    search = hor
-                    currentrow = s
+                    loop.append([s,currentcol]) # add this cell to loop_nodes
+                    used_cols.append(currentcol) # add this column to used_cols
+                    search = hor # switch to horizontal search
+                    currentrow = s # mark current row
                     break
-            starts = 0
+            starts = 0 # set the index starting vertical search back to 0
             if search == vert:
                 startd = loop[len(loop) - 1][1] + 1
-                loop.pop()
-                used_rows.pop()
+                loop.pop() # delete the last element in loop
+                used_rows.pop() # delete the last element in used_rows
                 currentrow = loop[len(loop) - 1][0]
                 currentcol = loop[len(loop) - 1][1]
-                search = hor
-
+                search = hor # switch to horizontal search
+    
+    # separate loop nodes to plus nodes and minus nodes
     for i in range(0,len(loop)):
         if (i%2 == 0):
             plus_nodes.append(loop[i])
@@ -389,21 +392,21 @@ def find_loop(costmatrix,start_row,start_col,solution):
 
     for i in range(0,row):
         for j in range(0,col):
-            if closed_loop[i][j] == -1:
+            if closed_loop[i][j] == -1: # find the smallest value among minus_nodes and set min_sandmove to corresponding solution value
                 if solution[i][j] < min_sandmove:
                     min_sandmove = solution[i][j]
     
     for i in range(0,row):
         for j in range(0,col):
-            if closed_loop[i][j] == -1:
+            if closed_loop[i][j] == -1: # subtract min_sandmove from the occupied cells marked with minus sign
                 solution[i][j] -= min_sandmove
-            elif closed_loop[i][j] == 1:
+            elif closed_loop[i][j] == 1: # add min_sandmove to the occupied cells marked with plus sign
                 solution[i][j] += min_sandmove
 
     for i in range(0,row):
         for j in range(0,col):
             if solution[i][j] != epsilon:
-                cost += costmatrix[i][j] * solution[i][j]
+                cost += costmatrix[i][j] * solution[i][j] # calculate total cost: excluding the cells equal to epsilon
     
     return solution, cost
 
