@@ -14,6 +14,7 @@ occupied cell and mark the corner with a plus sign. Continue the search until th
 5. Find the smallest value among the cells marked with minus sign. Add it to cells marked with plus sign and subtract it from cells
 marked with minus sign.
 6. Check again for the revised solution to see if it's optimal.
+7. If not, repeat the procedure until an optimal solution is found.
 Quantum Chaos:
 
 
