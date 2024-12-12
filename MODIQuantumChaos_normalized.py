@@ -1,25 +1,3 @@
-'''
-Using MODI method to solve transportation problem:
-1. Find an initial solution with m + n -1 occupied cells and calculate u[i] and v[j] for rows and columns using Least Cost Method.
-To start with, assign u[i] to be zero. Then calculate of u_s and v_s using C_ij = u_i + v_j. 
-2. For unoccupied cells, calculate opportunity cost = C_ij - u_i - v_j. 
-3. Test if basic feasible solution is optimal: 1). Check whether row(m) + col(n) - 1 = total number of allocated cells. If the total
-number of allocated cells is fewer than m + n - 1, the case of degeneracy occurs. To convert unoccupied cells into occupied cells,
-start from the least value among all the unoccupied cells and check if that cell has no closed-loop formation. If so, select it as a
-new occupied cell and assign with value epsilon. 2). Examine the sign of each opportunity cost cell: If opportunity_cost > 0, then
-current solution is optimal; If opportunity_cost = 0, then an alternative solution exists; If there exists opportunity_cost < 0, then
-an improved solution can be obtained by pivoting from the cell with the largest negative value of opportunity cost.
-4. Construct a closed loop from the cell with largest negative opportunity cost. Start the loop with the selected cell and mark it
-with a plus sign. Then, search along the row to an occupied cell, mark the cell with a minus sign and continue down the column to an
-occupied cell and mark the corner with a plus sign. Continue the search until the loop gets back to the selected cell.
-5. Find the smallest value among the cells marked with minus sign. Add it to cells marked with plus sign and subtract it from cells
-marked with minus sign.
-6.Check again for the revised solution to see if it's optimal.
-
-Errors:
-1. The normalizing method would cause a discrepency when sum_supply differs from sum_demand greatly.
-2. Hang at nbox = 24/ 28/ 30, theta = np.pi / 3 (2 small amount of leftouts in demand[] and supply[]).
-'''
 import sys
 sys.setrecursionlimit(5000)  # set maximum recursion depth manually
 
@@ -33,10 +11,10 @@ xmin = -3.747
 xmax = 3.747
 ymin = -3.747
 ymax = 3.747
-nbox = 50
+nbox = 40
 rho = 0.5
 p =  0.25
-theta = np.pi / 3
+theta = np.pi / 10
 gridboxcutoff = 0.001 / (nbox ** 2)
 
 # define initial and final functions
@@ -112,68 +90,72 @@ for i in range(len(supply)):
 
 # using least cost method, count the total number of supply and demand cells that get to 0
 def finished_least_cost(supply,demand):
-    cnt_supply = 0
-    cnt_demand = 0
+    cnt_supply = 0 # initialize supply counting
+    cnt_demand = 0 # initialize demand counting
     for i in supply:
-        if i == 0:
+        if i == 0: # if the supply cell gets to zero
             cnt_supply += 1
     for i in demand:
-        if i == 0:
+        if i == 0: # if the demand cell gets to zero
             cnt_demand += 1
-    return cnt_supply + cnt_demand
+    return cnt_supply + cnt_demand # return the total number of cells
 
 # get u's and v's, check if all the u's and v's get their values
 # input a list, return true if there's still u/ v with its initialized value
 def finish_loop(list):
     flag = False
     for i in list:
-        if i == -1e9:
+        if i == -1e9: # having u's and v's with their initialized value
             flag = True
     return flag
 
 # find the initial solution using least cost method
 def find_initial_sol(costmatrix,costmatrix_copy,supply,demand):
-    cost = 0
-    matrix_min = np.min(costmatrix_copy)
-    max_val = 1e9
+    cost = 0 # initialize cost
+    matrix_min = np.min(costmatrix_copy) # starting from the minimum
+    max_val = 1e9 # define a max value
 
     check = True
 
     while(check):
         for i in range(0,row):
             for j in range(0,col):
-                if costmatrix_copy[i][j] == matrix_min:
-                    if supply[i] >= demand[j]:
-                        supply[i] -= demand[j]
-                        solution[i][j] += demand[j]
-                        cost += costmatrix[i][j] * demand[j]
-                        demand[j] = 0
-                    else:
-                        demand[j] -= supply[i]
-                        solution[i][j] += supply[i]
-                        cost += costmatrix[i][j] * supply[i]
-                        supply[i] = 0
-                    costmatrix_copy[i][j] = max_val
-                    matrix_min = np.min(costmatrix_copy)
+                if costmatrix_copy[i][j] == matrix_min: # if costmatrix_copy equals the minimum
+                    if supply[i] >= demand[j]: # if supply is bigger than demand
+                        supply[i] -= demand[j] # subtract the same demand value from corresponding supply cell
+                        solution[i][j] += demand[j] # add the demand value to the solution cell
+                        cost += costmatrix[i][j] * demand[j] # add this step to the total cost
+                        demand[j] = 0 # remove all the demand value
+                    else: # if demand is bigger than supply
+                        demand[j] -= supply[i] # subtract the same supply value from corresponding demand cell
+                        solution[i][j] += supply[i] # add the supply value to the solution cell
+                        cost += costmatrix[i][j] * supply[i] # add this step to the total cost
+                        supply[i] = 0 # remove all the supply value
+                    costmatrix_copy[i][j] = max_val # label this costmatrix_copy cell with the defined max value
+                    matrix_min = np.min(costmatrix_copy) # check the minimum in the rest cells
+        # if all the cells in supply and demand get to 0 or there's one cell remaining some very small amount of sand, end the loop
         if finished_least_cost(supply,demand) == len(supply) + len(demand) - 1 or finished_least_cost(supply,demand) == len(supply) + len(demand):
             check = False
 
-    return solution, cost
+    return solution, cost # return solution matrix, cost
 
+# find v's, start from row 0
 def find_u_s(costmatrix,u_s,v_s,sol_row,solution_epsilon):
     for j in range(0,col):
-        if solution_epsilon[sol_row][j] == True:
+        if solution_epsilon[sol_row][j] == True: # for a corresponding basic cell, calculate v value (start from u[0] = 0)
             if v_s[j] == -1e9:
                 v_s[j] = costmatrix[sol_row][j] - u_s[sol_row]
-                find_v_s(costmatrix,u_s,v_s,j,solution_epsilon)
+                find_v_s(costmatrix,u_s,v_s,j,solution_epsilon) # continue searching for u value
 
+# find u's
 def find_v_s(costmatrix,u_s,v_s,sol_col,solution_epsilon):
     for i in range(0,row):
-        if solution_epsilon[i][sol_col] == True:
+        if solution_epsilon[i][sol_col] == True: # for a corresponding basic cell, calculate u value
             if u_s[i] == -1e9:
                 u_s[i] = costmatrix[i][sol_col] - v_s[sol_col]
-                find_u_s(costmatrix,u_s,v_s,i,solution_epsilon)
+                find_u_s(costmatrix,u_s,v_s,i,solution_epsilon) # continue searching for v value
 
+# assign basic variables, find u's and v's, calculate opportunity cost and decide if the cost is the optimal solution
 def check_solution(costmatrix,solution,cost):
     opportunity_cost = [[1e9 for x in range(col)] for y in range(row)]
     solution_epsilon = [[False for x in range(col)] for y in range(row)]
