@@ -15,13 +15,9 @@ occupied cell and mark the corner with a plus sign. Continue the search until th
 marked with minus sign.
 6. Check again for the revised solution to see if it's optimal.
 7. If not, repeat the procedure until an optimal solution is found.
-Quantum Chaos:
-
 
 Errors:
 1. Normalizing sum_supply and sum_demand would cause a discrepency when sum_supply differs from sum_demand greatly.
 2. Codes hang at nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftouts in demand[] and supply[]);
                  nbox = 40, theta = 𝜋/7 (print repeated values at some point);
                  nbox = 40, theta = 𝜋/11 (hang at some point);
-
-References:

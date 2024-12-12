@@ -71,6 +71,7 @@ for i in range(nbox):
             demand_store.append(sand[i][j])
 demand = [abs(i) for i in demand_store]
 
+# normalize sum_supply and sum_demand
 sum_demand = 0
 for i in demand:
     sum_demand += i
@@ -97,15 +98,15 @@ for i in range(len(supply)):
 
 # using least cost method, count the total number of supply and demand cells that get to 0
 def finished_least_cost(supply,demand):
-    cnt_supply = 0 # initialize supply counting
-    cnt_demand = 0 # initialize demand counting
+    cnt_supply = 0
+    cnt_demand = 0
     for i in supply:
-        if i == 0: # if the supply cell gets to zero
+        if i == 0:
             cnt_supply += 1
     for i in demand:
-        if i == 0: # if the demand cell gets to zero
+        if i == 0:
             cnt_demand += 1
-    return cnt_supply + cnt_demand # return the total number of cells
+    return cnt_supply + cnt_demand
 
 # get u's and v's, check if all the u's and v's get their values
 # input a list, return true if there's still u/ v with its initialized value
@@ -144,7 +145,7 @@ def find_initial_sol(costmatrix,costmatrix_copy,supply,demand):
         if finished_least_cost(supply,demand) == len(supply) + len(demand) - 1 or finished_least_cost(supply,demand) == len(supply) + len(demand):
             check = False
 
-    return solution, cost # return solution matrix, cost
+    return solution, cost
 
 # find v's, start from row 0
 def find_u_s(costmatrix,u_s,v_s,sol_row,solution_epsilon):
@@ -165,62 +166,63 @@ def find_v_s(costmatrix,u_s,v_s,sol_col,solution_epsilon):
 # assign basic variables, find u's and v's, calculate opportunity cost and decide if the cost is the optimal solution
 def check_solution(costmatrix,solution,cost):
     opportunity_cost = [[1e9 for x in range(col)] for y in range(row)]
-    solution_epsilon = [[False for x in range(col)] for y in range(row)]
+    solution_epsilon = [[False for x in range(col)] for y in range(row)] # marking basic cells
     u_s = [-1e9 for x in range(row)]
-    u_s[0] = 0
+    u_s[0] = 0 # set u[0] = 0 for convenience
     v_s = [-1e9 for x in range(col)]
-    epsilon = 1.e-9
+    epsilon = 1.e-9 # assign epsilon value
     continue_loop = True
 
     for i in range(0,row):
         for j in range(0,col):
             if solution[i][j] != 0:
-                solution_epsilon[i][j] = True
+                solution_epsilon[i][j] = True # marking basic cells
 
-    cnt_sol = check_basic_variable_sol(solution)
+    cnt_sol = check_basic_variable_sol(solution) # counting basic cells
 
-    if cnt_sol + 1 < row + col:
+    if cnt_sol + 1 < row + col: # if degenaracy occurs
         sort_list = []
         for i in range(0,row):
             for j in range(0,col):
-                if solution[i][j] == 0:
+                if solution[i][j] == 0: # appending non-basic cost matrix values
                     sort_list.append(costmatrix[i][j])
 
-        sort_list.sort()
-        while cnt_sol + 1 < row + col:
+        sort_list.sort() # sort the non-basic cost matrix values
+        while cnt_sol + 1 < row + col: # while degenaracy occurs
             for i in range(0,row):
                 cnt_sol = check_basic_variable_sol(solution)
-                if cnt_sol + 1 == row + col:
+                if cnt_sol + 1 == row + col: # if the number of basic cells satisfies row + col - 1, break
                     break
                 for j in range(0,col):
                     used_rows_loop = []
                     used_cols_loop = []
-                    target_col_loop = j
+                    target_col_loop = j # mark the target column
+                    # start from the smallest value and checking for non-basic cells: if no loop is formed, mark this cell to be an additional basic cell
                     if costmatrix[i][j] == sort_list[0] and solution_epsilon[i][j] == False and check_loop(solution,used_rows_loop,used_cols_loop,i,j,target_col_loop) == False:
-                        solution_epsilon[i][j] = True
-                        solution[i][j] += epsilon
+                        solution_epsilon[i][j] = True # marking a basic cell
+                        solution[i][j] += epsilon # add epsilon to it, break
                         break
-            sort_list.pop(0)
+            sort_list.pop(0) # delete the smallest value
     
-    while(continue_loop):
-        find_u_s(costmatrix,u_s,v_s,0,solution_epsilon)
-        if finish_loop(u_s) == False and finish_loop(v_s) == False:
+    while(continue_loop): # calculate u's and v's
+        find_u_s(costmatrix,u_s,v_s,0,solution_epsilon) # starting from finding v (as u[0] = 0)
+        if finish_loop(u_s) == False and finish_loop(v_s) == False: # if all the u's and v's are found, break
             continue_loop = False
 
     for i in range(0,row):
         for j in range(0,col):
             if solution[i][j] == 0:
-                opportunity_cost[i][j] = costmatrix[i][j] - u_s[i] - v_s[j]
+                opportunity_cost[i][j] = costmatrix[i][j] - u_s[i] - v_s[j] # calculate opportunity cost = C_ij - u_i - v_j
 
-    solution_state = 1
+    solution_state = 1 # check if the solution cost is optimal
 
     for i in range(0,row):
         for j in range(0,col):
-            if opportunity_cost[i][j] != 1e9 and opportunity_cost[i][j] < 0:
-                solution_state = -1
+            if opportunity_cost[i][j] != 1e9 and opportunity_cost[i][j] < 0: # if there's opportunity cost with negative value:
+                solution_state = -1                                          # solution is not optimal
                 break
     
-    if solution_state == 1:
+    if solution_state == 1: # if the solution is optimal: print the cost
         print("The cost is: " + str(cost))
         print("This is the optimal solution.")
         return False, solution, cost
@@ -228,21 +230,23 @@ def check_solution(costmatrix,solution,cost):
     elif solution_state == -1:
         print("The cost is: " + str(cost))
         print("This is not the optimal solution.")
-        oppor_cost_min = np.min(opportunity_cost)
+        oppor_cost_min = np.min(opportunity_cost) # pivot from the lowest negative opportunity cost
         for i in range(0,row):
             for j in range(0,col):
                 if opportunity_cost[i][j] == oppor_cost_min:
-                    solution, cost = find_loop(costmatrix,i,j,solution)
+                    solution, cost = find_loop(costmatrix,i,j,solution) # find a closed loop
                     return True, solution, cost
 
+# calculate the number of basic variables: when solution cell is not 0
 def check_basic_variable_sol(solution):
     cnt_basic_var = 0
     for i in range(0,row):
         for j in range(0,col):
-            if solution[i][j] != 0:
+            if solution[i][j] != 0: # if solution is not 0, count the cell as a basic variable
                 cnt_basic_var += 1
     return cnt_basic_var
 
+# check if an element is already in a list
 def check_list(a,list):
     check = True
     for i in list:
@@ -251,11 +255,13 @@ def check_list(a,list):
             break
     return check
 
+# check if there's a loop, if not, assign the cell to be a new basic variable (together with check_loop_run)
 def check_loop(solution,used_rows,used_cols,start_row,start_col,pivotcol):
     loop_found = False
     check_loop_run(solution,used_rows,used_cols,start_row,start_col,loop_found,pivotcol)
     return loop_found
 
+# generally follows the logic of find_loop
 def check_loop_run(solution,used_rows,used_cols,start_row,start_col,loop_found,pivotcol):
     loop = [[start_row,start_col]]
     hor = 0
@@ -305,15 +311,18 @@ def check_loop_run(solution,used_rows,used_cols,start_row,start_col,loop_found,p
                 search = hor
     return loop_found
 
+# find a closed loop: start with the unoccupied cell with largest negative opportunity cost and mark this cell with a plus sign (1),
+# trace a path along the row to an occupied cell (solution != 0), and mark with a minus sign (-1), then continue down the column and
+# repeat the process till it goes back to the starting cell
 def find_loop(costmatrix,start_row,start_col,solution):
     closed_loop = [[0 for x in range(col)] for y in range(row)]
-    closed_loop[start_row][start_col] = 1
+    closed_loop[start_row][start_col] = 1 # mark the cell with the lowest opportunity cost to be the starting point
 
     plus_nodes = []
     minus_nodes = []
     used_rows = []
     used_cols = []
-    pivotcol = start_col
+    pivotcol = start_col # mark the target column
     loop = [[start_row,start_col]]
     loop_found = False
     hor = 0
@@ -375,8 +384,8 @@ def find_loop(costmatrix,start_row,start_col,solution):
         closed_loop[a[0]][a[1]] = -1
 
     cost = 0
-    min_sandmove = 1e9
-    epsilon = 1.e-9
+    min_sandmove = 1e9 # initialize min_sandmove with a max value
+    epsilon = 1.e-9 # assign epsilon value
 
     for i in range(0,row):
         for j in range(0,col):
@@ -398,12 +407,11 @@ def find_loop(costmatrix,start_row,start_col,solution):
     
     return solution, cost
 
- # mark start time
-start_time = tm.time()
-solution, cost = find_initial_sol(costmatrix,costmatrix_copy,supply,demand)
+start_time = tm.time() # mark start time
+solution, cost = find_initial_sol(costmatrix,costmatrix_copy,supply,demand) # find an initial solution
 continue_check_sol, solution, cost = check_solution(costmatrix,solution,cost)
-while(continue_check_sol):
+while(continue_check_sol): # keep on finding a better solution until the optimal is found
     continue_check_sol, solution, cost = check_solution(costmatrix,solution,cost)
 
-end_time = tm.time()
-print(end_time - start_time)
+end_time = tm.time() # mark end time
+print(end_time - start_time) # print out needed time
