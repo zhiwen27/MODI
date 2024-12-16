@@ -1,4 +1,4 @@
-This Python code uses MODI Method to solve Transportation Problem occurred in Quantum Chaos:
+This Python code uses MODI Method to solve Transportation Problem occurred in Quantum Chaos: <br />
 MODI Method:
 1. Find an initial solution with m + n -1 occupied cells and calculate u[i] and v[j] for rows and columns using Least Cost Method.
 To start with, assign u[i] to be zero. Then calculate of u_s and v_s using C_ij = u_i + v_j. 
@@ -19,6 +19,7 @@ marked with minus sign.
 Errors:
 1. Normalizing sum_supply and sum_demand would cause a discrepency when sum_supply differs from sum_demand greatly.
 2. In degeneracy the cost cells may have the same value, so I could be deleting the first value in sort list but repeatedly checking the cells.
-3. Code hangs at nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftouts in demand[] and supply[]);
-                 nbox = 40, theta = 𝜋/7 (print repeated values at some point);
-                 nbox = 40, theta = 𝜋/11 (hang at some point);
+3. Code hangs at: <br />
+   nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftouts in demand[] and supply[]); <br />
+   nbox = 40, theta = 𝜋/7 (print repeated values at some point); <br />
+   nbox = 40, theta = 𝜋/11 (hang at some point); <br />
