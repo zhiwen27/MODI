@@ -18,7 +18,7 @@ marked with minus sign.
 7. If not, repeat the procedure until an optimal solution is found.
 
 Results: <br />
-<img width="462" alt="image" src="https://github.com/user-attachments/assets/f43e07a9-13f5-4176-92a8-0f8b896d2750" /> <br />
+![image](https://github.com/user-attachments/assets/bdaafa23-299c-425a-bd5d-312d63ae1e41) <br />
 The code is able to provide answers that were close to the analytical result within 0.3% ~ 2.2% of error, and get to nbox values like 50.
 
 Future improvements:
