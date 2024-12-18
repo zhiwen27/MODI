@@ -19,11 +19,11 @@ marked with minus sign.
 
 Results: <br />
 ![image](https://github.com/user-attachments/assets/eb8b4b20-f268-49ee-9e38-36b2d025cd4e) <br />
-The code is able to provide answers that were close to the analytical result within 0.3% ~ 2.2% of error, and get to nbox values like 50.
+The code is able to provide answers that were close to the analytical result within 0.3% ~ 2.2% of error, and get to large nbox values like 50.
 
 Future improvements:
-1. Normalizing sum_supply and sum_demand would cause a discrepency when sum_supply differs from sum_demand greatly.
-2. In degeneracy the cost cells may have the same value, so I could be deleting the first value in sort list but repeatedly checking the cells.
+1. Normalizing sum_supply and sum_demand could cause a discrepency when sum_supply differs from sum_demand greatly.
+2. In degeneracy the cost cells may have the same value, so could be repeatedly checking the cells when deleting the first value in sort list.
 3. Code hangs at: <br />
    nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftovers in demand[] and supply[]); <br />
    nbox = 40, theta = 𝜋/7 (print repeated values at some point); <br />
