@@ -1,7 +1,5 @@
 Systems exhibiting sensitive dependence on initial conditions are defined to be chaotic. To find quantum chaos, we need to calculate the distance between quantal states and check if the difference grows exponentially. To define the distance between quantal states, we used the Wigner formulation where the states are represented in normalized real valued functions. By treating the wave functions as boxes of sands, we then need to find the minimum cost to move the sands in initial state to final state. This becomes a transportation problem that MODI method could work. <br />
 
-This Python code uses MODI Method to solve Transportation Problem occurred in Quantum Chaos: <br />
-
 MODI Method:
 1. Find an initial solution with m + n -1 occupied cells and calculate u[i] and v[j] for rows and columns using Least Cost Method.
 To start with, assign u[i] to be zero. Then calculate of u_s and v_s using C_ij = u_i + v_j. 
