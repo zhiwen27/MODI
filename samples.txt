@@ -1,0 +1,55 @@
+1. basic example
+row: 3 col: 4
+cost matrix:
+19 30 50 12
+70 30 40 60
+40 10 60 20
+supply:
+7 10 18
+demand:
+5 8 7 15
+
+2. degeneracy occurs in initial solution
+row: 3 col: 3
+cost matrix:
+8 7 3
+3 8 9
+11 3 5
+supply:
+60 70 80
+demand:
+50 80 80
+
+3. degeneracy occurs in later solution
+row: 3 col: 4
+cost matrix:
+3 5 7 6
+2 5 8 2
+3 6 9 2
+supply:
+50 75 25
+demand:
+20 20 50 60
+
+4. a slightly more complicated version of 3
+row: 4 col: 5
+cost matrix:
+10 2 3 15 9
+5 10 15 2 4
+15 5 14 7 15
+20 15 13 25 8
+supply:
+35 40 20 30
+demand:
+20 20 40 10 35
+
+5. to check if find_loop() works well
+row: 3 col: 3
+cost matrix:
+8 5 6
+15 10 12
+3 9 10
+supply:
+120 80 80
+demand:
+150 80 50
