@@ -29,5 +29,9 @@ Future improvements:
    nbox = 30, theta = π/3 (2 small amount of leftovers in supply[]); <br />
    nbox = 17, theta = π/6 (caught in an infinite loop at some point); <br />
    nbox = 22, theta = π/6 (2 small amount of leftovers in supply[]); <br />
+   nbox = 39, theta = π/6, (print repeated values at some point); <br />
+   nbox = 33, theta = π/7, (caught in an infinite loop at some point); <br />
+   nbox = 36, theta = π/7, (caught in an infinite loop at some point); <br />
+   nbox = 38, theta = π/7, (caught in an infinite loop at some point); <br />
    nbox = 40, theta = 𝜋/7 (print repeated values at some point); <br />
    nbox = 40, theta = 𝜋/11 (caught in an infinite loop at some point); <br />
