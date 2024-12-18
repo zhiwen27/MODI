@@ -26,6 +26,6 @@ Future improvements:
 1. Normalizing sum_supply and sum_demand would cause a discrepency when sum_supply differs from sum_demand greatly.
 2. In degeneracy the cost cells may have the same value, so I could be deleting the first value in sort list but repeatedly checking the cells.
 3. Code hangs at: <br />
-   nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftouts in demand[] and supply[]); <br />
+   nbox = 24/ 28/ 30, theta = 𝜋/3 (2 small amount of leftovers in demand[] and supply[]); <br />
    nbox = 40, theta = 𝜋/7 (print repeated values at some point); <br />
-   nbox = 40, theta = 𝜋/11 (hang at some point); <br />
+   nbox = 40, theta = 𝜋/11 (caught in an infinite loop at some point); <br />
