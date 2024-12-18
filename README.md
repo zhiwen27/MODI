@@ -18,7 +18,11 @@ marked with minus sign.
 6. Check again for the revised solution to see if it's optimal.
 7. If not, repeat the procedure until an optimal solution is found.
 
-Errors:
+Results: <br />
+<img width="462" alt="image" src="https://github.com/user-attachments/assets/f43e07a9-13f5-4176-92a8-0f8b896d2750" /> <br />
+The code is able to provide answers that were close to the analytical result within 0.3% ~ 2.2% of error, and get to nbox values like 50.
+
+Future improvements:
 1. Normalizing sum_supply and sum_demand would cause a discrepency when sum_supply differs from sum_demand greatly.
 2. In degeneracy the cost cells may have the same value, so I could be deleting the first value in sort list but repeatedly checking the cells.
 3. Code hangs at: <br />
