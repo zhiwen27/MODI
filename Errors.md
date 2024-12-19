@@ -1,4 +1,4 @@
-The code is tested for xmin = -3.747, xmax = 3.747, ymin = -3.747, ymax = 3.747, ρ = 0.5, p =  0.25, and varies θ value from π/3 to π/11 and nbox value from 5 to 40 (to 50 for theta = π/3, π/4). It has problems with the following parameters: <br />
+The code is tested by varying θ value from π/3 to π/11 and nbox value from 5 to 40 (to 50 for θ = π/3 and π/4) with xmin = -3.747, xmax = 3.747, ymin = -3.747, ymax = 3.747, ρ = 0.5, p =  0.25. Problems occur with the following parameters: <br />
 nbox = 24, θ = π/3 (2 small amount of leftovers in demand[]); <br />
 nbox = 28, θ = π/3 (2 small amount of leftovers in demand[]); <br />
 nbox = 30, θ = π/3 (2 small amount of leftovers in supply[]); <br />
