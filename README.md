@@ -24,4 +24,4 @@ The code is able to provide answers that were close to the analytical result wit
 Future improvements:
 1. Normalizing sum_supply and sum_demand could cause a discrepency when sum_supply differs from sum_demand greatly.
 2. In degeneracy the cost cells may have the same value, so could be repeatedly checking the cells when deleting the first value in sort list.
-3. 
+3. The code is not able to provide result for some parameters, which are summarized in the document Errors.md.
