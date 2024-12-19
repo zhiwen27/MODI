@@ -24,21 +24,4 @@ The code is able to provide answers that were close to the analytical result wit
 Future improvements:
 1. Normalizing sum_supply and sum_demand could cause a discrepency when sum_supply differs from sum_demand greatly.
 2. In degeneracy the cost cells may have the same value, so could be repeatedly checking the cells when deleting the first value in sort list.
-3. Code hangs at: <br />
-   nbox = 24, theta = π/3 (2 small amount of leftovers in demand[]); <br />
-   nbox = 28, theta = π/3 (2 small amount of leftovers in demand[]); <br />
-   nbox = 30, theta = π/3 (2 small amount of leftovers in supply[]); <br />
-   nbox = 17, theta = π/6 (caught in an infinite loop at some point); <br />
-   nbox = 22, theta = π/6 (2 small amount of leftovers in supply[]); <br />
-   nbox = 39, theta = π/6, (print repeated values at some point); <br />
-   nbox = 33, theta = π/7, (caught in an infinite loop at some point); <br />
-   nbox = 36, theta = π/7, (caught in an infinite loop at some point); <br />
-   nbox = 38, theta = π/7, (caught in an infinite loop at some point); <br />
-   nbox = 40, theta = 𝜋/7 (print repeated values at some point); <br />
-   nbox = 36, theta = π/8 (caught in an infinite loop at some point); <br />
-   nbox = 39, theta = π/8 (print repeated values at some point); <br />
-   nbox = 34, theta = π/9 (print repeated values at some point); <br />
-   nbox = 38, theta = π/9 (2 small amount of leftovers in supply[]); <br />
-   nbox = 18, theta = π/10 (2 small amount of leftovers in supply[]); <br />
-   nbox = 20, theta = π/10 (2 small amount of leftovers in supply[]); <br />
-   nbox = 40, theta = 𝜋/11 (caught in an infinite loop at some point); <br />
+3. 
