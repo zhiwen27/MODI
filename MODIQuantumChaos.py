@@ -13,13 +13,13 @@ xmax = 3.747
 ymin = -3.747
 ymax = 3.747
 # nbox sets the number of grids on one side. The sandbox will be divided into nbox * nbox grids.
-nbox = 15
+nbox = 25
 # initial strethes in x and y direction
 rho = 0.5
 # final streches in x and y direction with respect to the initial
 p =  0.25
 # the angle the wavefunction rotates
-theta = np.pi / 4
+theta = np.pi / 11
 # set cutoff value to be 0.001 / (nbox^2) (arbitrarily)
 gridboxcutoff = 0.001 / (nbox ** 2)
 
