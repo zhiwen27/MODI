@@ -16,3 +16,5 @@ Parameters:
    nbox = 18, theta = π/10 (2 small amount of leftovers in supply[]); <br />
    nbox = 20, theta = π/10 (2 small amount of leftovers in supply[]); <br />
    nbox = 40, theta = 𝜋/11 (caught in an infinite loop at some point); <br />
+   nbox = 18, theta = π/11, (2 small amount of leftovers in supply[]); <br />
+   nbox = 20, theta = π/11, (2 small amount of leftovers in supply[]); <br />
